@@ -82,12 +82,18 @@
     .brand-mark { display: flex; align-items: center; gap: 1rem; }
     .brand-icon {
       width: 44px; height: 44px;
-      background: linear-gradient(135deg, var(--lila-deep), var(--lila-mid));
+      background: var(--white);
       border-radius: 10px;
       display: flex; align-items: center; justify-content: center;
-      color: var(--white);
-      font-size: 1.1rem;
       box-shadow: 0 4px 14px rgba(91,75,138,.3);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .brand-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
     .brand-text .firm-name {
       font-family: 'Playfair Display', serif;
@@ -1169,14 +1175,16 @@
     <div class="topbar-dot"></div>
     <span>Contabilidad · Gestión Administrativa · Soluciones Empresariales</span>
   </div>
-  <span>📞 <a href="tel:+573104852208">+57 310 485 2208</a> &nbsp;|&nbsp; ✉ <a href="mailto:info@keyrenasesores.com">info@keyrenasesores.com</a></span>
+  <span>📞 <a href="tel:+573104852208">+57 310 485 2208</a> &nbsp;|&nbsp; ✉ <a href="mailto:Asesoriaskeyren@keyrenasesores.com">Asesoriaskeyren@keyrenasesores.com</a></span>
 </div>
 
 <!-- NAVBAR -->
 <nav class="navbar-main">
   <div class="navbar-inner">
     <div class="brand-mark">
-      <div class="brand-icon"><i class="bi bi-bar-chart-line"></i></div>
+      <div class="brand-icon">
+        <img src="img/logo.jpg" alt="Logo Keyren Asesores">
+      </div>
       <div class="brand-text">
         <div class="firm-name">KEYREN ASESORES</div>
         <div class="firm-tagline">Contabilidad & Administración</div>
@@ -1579,8 +1587,9 @@ const whatsappNumber = '573104852208';
 
 function abrirWhatsApp(servicio = null, precio = null) {
   const mensajeBase = servicio
-    ? `Hola, vengo de la página de Keyren Asesores y quisiera más información sobre el servicio ${servicio}${precio ? ` (${precio})` : ''}.`
-    : 'Hola, vengo de la página de Keyren Asesores y quisiera más información sobre sus servicios.';
+    ? `*Hola *\n\nVengo de la página de *Keyren Asesores* y quisiera más información sobre el siguiente servicio:\n\n*📌 Servicio:* ${servicio}\n${precio ? `* Precio:* ${precio}\n` : ''}\nQuedo atento(a) a su respuesta. ¡Muchas gracias! `
+    : `*Hola *\n\nVengo de la página de *Keyren Asesores* y quisiera más información sobre sus servicios.\n\nQuedo atento(a) a su respuesta. ¡Muchas gracias! `;
+
   const msg = encodeURIComponent(mensajeBase);
   window.open(`https://wa.me/${whatsappNumber}?text=${msg}`, '_blank');
 }
