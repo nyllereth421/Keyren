@@ -1,12 +1,40 @@
 let menuData = [];
 let enviando = false;
 
-fetch('menu.json')
-  .then(res => res.json())
-  .then(data => {
-    menuData = data;
-    mostrarMenu(data);
+function cargarMenu() {
+  // Siempre cargar desde menu.json para asegurar que los cambios se reflejen
+  fetch('menu.json')
+    .then(res => res.json())
+    .then(data => {
+      menuData = data;
+      // Guardar en localStorage para persistencia
+      localStorage.setItem("menu", JSON.stringify(data));
+      mostrarMenu(data);
+      generarBotonesCategorias(data);
+    })
+    .catch(error => {
+      console.error('Error cargando menu.json:', error);
+      // Si falla, intentar cargar desde localStorage como respaldo
+      const menuLS = localStorage.getItem("menu");
+      if (menuLS) {
+        menuData = JSON.parse(menuLS);
+        mostrarMenu(menuData);
+        generarBotonesCategorias(menuData);
+      }
+    });
+}
+
+function generarBotonesCategorias(data) {
+  const categorias = [...new Set(data.map(p => p.categoria))];
+  const container = document.querySelector('.categorias');
+  container.innerHTML = '<button class="cat-btn cat-todos activo" onclick="filtrar(\'todos\')">Todos</button>';
+  categorias.forEach(cat => {
+    const btnClass = 'cat-' + cat.toLowerCase().replace(' ', '-');
+    container.innerHTML += `<button class="cat-btn ${btnClass}" onclick="filtrar('${cat}')">${cat}</button>`;
   });
+}
+
+cargarMenu();
 
 function mostrarMenu(data) {
 
@@ -18,7 +46,10 @@ function mostrarMenu(data) {
     container.innerHTML += `
       <div class="col-6 col-md-4">
         <div class="card pizza-card" onclick="abrirModal('${pizza.nombre}', '${pizza.descripcion}', '${pizza.precio}', '${pizza.imagen}')">
-          <img src="${pizza.imagen}" class="card-img-top">
+          <img src="${pizza.imagen}" class="card-img-top" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" style="width: 100%; height: 200px; object-fit: cover;">
+          <div class="card-img-top placeholder-img" style="display: none; width: 100%; height: 200px; background: linear-gradient(135deg, #C0392B, #D4AF37); align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.2rem;">
+            ${pizza.nombre.split(' ')[0]}
+          </div>
           <div class="card-body bg-dark text-white text-center">
             <h5>${pizza.nombre}</h5>
           </div>
@@ -26,7 +57,7 @@ function mostrarMenu(data) {
       </div>
     `;
 
-    
+
 
   });
 }
@@ -45,7 +76,24 @@ function abrirModal(nombre, descripcion, precio, imagen) {
   document.getElementById("modalTitulo").innerText = nombre;
   document.getElementById("modalDesc").innerText = descripcion;
   document.getElementById("modalPrecio").innerText = precio;
-  document.getElementById("modalImg").src = imagen;
+
+  const modalImg = document.getElementById("modalImg");
+  modalImg.src = imagen;
+  modalImg.onerror = function() {
+    this.style.display = 'none';
+    const placeholder = this.nextElementSibling;
+    if (placeholder) {
+      placeholder.style.display = 'flex';
+      placeholder.innerText = nombre.split(' ')[0];
+    }
+  };
+
+  // Reset placeholder visibility
+  const placeholder = modalImg.nextElementSibling;
+  if (placeholder) {
+    placeholder.style.display = 'none';
+  }
+  modalImg.style.display = 'block';
 
   let modal = new bootstrap.Modal(document.getElementById('pizzaModal'));
   modal.show();
@@ -65,9 +113,10 @@ function agregarAlCarrito(nombre, precio) {
   if (item) {
     item.cantidad++;
   } else {
+    let precioNumerico = parseInt(precio.replace(/\D/g, "")) || "Consultar";
     carrito.push({
       nombre,
-      precio: parseInt(precio.replace(/\D/g, "")),
+      precio: precioNumerico,
       cantidad: 1
     });
   }
@@ -92,7 +141,65 @@ function actualizarContador() {
   document.getElementById("contador").innerText = total;
 }
 
-// 🔹 Abrir carrito
+// 🔹 Enviar directo a WhatsApp
+function enviarDirecto() {
+  console.log("Carrito actual:", carrito);
+
+  if (carrito.length === 0) {
+    mostrarAlerta("⚠️ Selecciona al menos un servicio", "warning");
+    return;
+  }
+
+  // Pedir datos del cliente
+  let nombre = prompt("¿Cuál es tu nombre completo?");
+  if (!nombre || nombre.trim() === "") {
+    mostrarAlerta("⚠️ Por favor ingresa tu nombre", "warning");
+    return;
+  }
+
+  let telefono = prompt("¿Cuál es tu teléfono?");
+  if (!telefono || telefono.trim() === "") {
+    mostrarAlerta("⚠️ Por favor ingresa tu teléfono", "warning");
+    return;
+  }
+
+  // Construir mensaje
+  let mensaje = "*SOLICITUD DE SERVICIO - KEYREN ASESORES*\n\n";
+  mensaje += `Cliente: ${nombre}\n`;
+  mensaje += `Teléfono: ${telefono}\n\n`;
+  mensaje += `*SERVICIOS SOLICITADOS:*\n\n`;
+
+  carrito.forEach(item => {
+    mensaje += `📋 ${item.nombre}\n`;
+    mensaje += `Cantidad: ${item.cantidad}\n\n`;
+  });
+
+  mensaje += `*TOTAL A CONSULTAR*\n\nGracias por tu interés en nuestros servicios.`;
+
+  console.log("Mensaje construido:", mensaje);
+
+  // Mostrar mensaje para verificar antes de enviar
+  if (confirm("¿Enviar este mensaje a WhatsApp?\n\n" + mensaje)) {
+    let url = `https://wa.me/TU_NUMERO_DE_WHATSAPP_AQUI?text=${encodeURIComponent(mensaje)}`;
+    console.log("URL de WhatsApp:", url);
+
+    // Guardar solicitud
+    guardarPedido(nombre, telefono, carrito, 0);
+
+    // Abrir WhatsApp
+    window.open(url, "_blank");
+
+    // Limpiar carrito
+    carrito = [];
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+    actualizarContador();
+
+    mostrarAlerta("✅ Abriendo WhatsApp...", "success");
+  }
+}
+
+/* FUNCIONES ELIMINADAS (no se usan más)
+// 🔹 Abrir carrito (DEPRECATED)
 function abrirCarrito() {
   let lista = document.getElementById("listaCarrito");
   let total = 0;
@@ -100,14 +207,14 @@ function abrirCarrito() {
   lista.innerHTML = "";
 
   carrito.forEach((item, index) => {
-    let subtotal = item.precio * item.cantidad;
-    total += subtotal;
+    let subtotal = (typeof item.precio === 'number') ? item.precio * item.cantidad : 'Consultar';
+    if (typeof item.precio === 'number') total += subtotal;
 
     lista.innerHTML += `
       <div class="item-carrito">
         <div>
           <strong>${item.nombre}</strong><br>
-          $${item.precio} c/u
+          ${typeof item.precio === 'number' ? '$' + item.precio + ' c/u' : 'Valor a consultar'}
         </div>
 
         <div class="controles">
@@ -117,31 +224,33 @@ function abrirCarrito() {
         </div>
 
         <div>
-          $${subtotal}
+          ${typeof subtotal === 'number' ? '$' + subtotal : 'Consultar'}
           <button onclick="eliminarItem(${index})">X</button>
         </div>
       </div>
     `;
   });
 
-  document.getElementById("total").innerText = "$" + total;
+  let carrito_tiene_precios = carrito.some(item => typeof item.precio === 'number');
+  document.getElementById("total").innerText = carrito_tiene_precios ? "$" + total : "Consultar";
 
   let modal = new bootstrap.Modal(document.getElementById('carritoModal'));
   modal.show();
 }
+*/
 
-// 🔹 Enviar pedido
+/* FUNCIÓN ELIMINADA (DEPRECATED)
+// 🔹 Enviar pedido (ya no se usa)
 function enviarPedido() {
 
   if (carrito.length === 0) {
     mostrarAlerta("⚠️ El carrito está vacío", "warning");
     return;
   }
-
-  let modal = new bootstrap.Modal(document.getElementById('clienteModal'));
-  modal.show();
 }
+*/
 
+/* FUNCIÓN ELIMINADA (DEPRECATED)
 function confirmarPedido() {
 
   if (enviando) return;
@@ -161,21 +270,27 @@ function confirmarPedido() {
   }, 2000);
 
   let total = 0;
-  let mensaje = "*PEDIDO PIZZERÍA SAMY'S*\n\n";
+  let mensaje = "*SOLICITUD DE SERVICIO - KEYREN ASESORES*\n\n";
   mensaje += `Cliente: ${nombre}\n`;
   mensaje += `Teléfono: ${telefono}\n\n`;
+  mensaje += `*SERVICIOS SOLICITADOS:*\n\n`;
 
   carrito.forEach(item => {
-    let subtotal = item.precio * item.cantidad;
-    total += subtotal;
+    let subtotal = (typeof item.precio === 'number') ? item.precio * item.cantidad : 'Consultar';
+    if (typeof item.precio === 'number') total += subtotal;
 
-    mensaje += `${item.nombre}\n`;
-    mensaje += `${item.cantidad} x $${item.precio} = $${subtotal}\n\n`;
+    mensaje += `📋 ${item.nombre}\n`;
+    mensaje += `Cantidad: ${item.cantidad}\n`;
+    if (typeof subtotal === 'number') {
+      mensaje += `Valor: $${subtotal}\n\n`;
+    } else {
+      mensaje += `Valor: ${subtotal}\n\n`;
+    }
   });
 
-  mensaje += `TOTAL: $${total}`;
+  mensaje += `*TOTAL A CONSULTAR*\n\nGracias por tu interés en nuestros servicios.`;
 
-  let url = `https://wa.me/573143376449?text=${encodeURIComponent(mensaje)}`;
+  let url = `https://wa.me/TU_NUMERO_DE_WHATSAPP_AQUI?text=${encodeURIComponent(mensaje)}`;
 
   guardarPedido(nombre, telefono, carrito, total);
 
@@ -188,11 +303,12 @@ function confirmarPedido() {
 
   cerrarTodosLosModales();
 
-  mostrarAlerta("Pedido listo para enviar en WhatsApp", "success");
+  mostrarAlerta("Solicitud de servicio lista para enviar en WhatsApp", "success");
 
   document.getElementById("nombreCliente").value = "";
   document.getElementById("telefonoCliente").value = "";
 }
+*/
 
 function guardarPedido(nombre, telefono, carrito, total) {
 
@@ -325,6 +441,12 @@ function animarCarrito() {
     btn.classList.remove("animar");
   }, 300);
 }
+
+window.addEventListener('storage', (event) => {
+  if (event.key === 'menu') {
+    cargarMenu();
+  }
+});
 
 document.addEventListener("DOMContentLoaded", () => {
 

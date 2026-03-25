@@ -1,10 +1,10 @@
-# Samy's Pizza
+# Keyren Asesores
 
-Sitio web para la pizzería Sam's Pizza.
+Sitio web para Keyren Asesores - Servicios Contables y Administrativos.
 
 ## Configuración de Firebase
 
-Para que los pedidos persistan en diferentes navegadores, se utiliza Firebase Firestore.
+Para que las solicitudes de servicios persistan en diferentes navegadores, se utiliza Firebase Firestore.
 
 ### Pasos para configurar:
 
@@ -55,9 +55,10 @@ service cloud.firestore {
 
 ## Funcionalidades
 
-- Menú interactivo
-- Carrito de compras
-- Envío de pedidos por WhatsApp
-- Panel de administración para gestionar pedidos
-- Persistencia de datos con Firebase</content>
+- Catálogo interactivo de servicios
+- Carrito de solicitudes de servicios
+- Envío de solicitudes por WhatsApp
+- Panel de administración para gestionar solicitudes
+- Persistencia de datos con Firebase
+- Servicios: Contabilidad General, Facturación, Nómina, Gestión Administrativa y más</content>
 <parameter name="filePath">c:\Users\nylle\OneDrive\Desktop\pizzeria\Samy-s-Pizza\README.md

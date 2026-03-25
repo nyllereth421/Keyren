@@ -1,65 +1,93 @@
 [
   {
-    "nombre": "Queso - Bocadillo",
-    "descripcion": "Queso doble crema, bocadillo veleño.",
-    "precio": "$14.000",
-    "imagen": "img/queso.jpg",
-    "categoria": "tradicional"
+    "nombre": "Contabilidad General",
+    "descripcion": "Registro y procesamiento completo de la contabilidad de tu empresa.",
+    "precio": "Consultar",
+    "imagen": "img/contabilidad.jpg",
+    "categoria": "contabilidad"
   },
   {
-    "nombre": "Pepperoni",
-    "descripcion": "Salsa napolitana, queso doble crema, pepperoni.",
-    "precio": "$18.000",
-    "imagen": "img/pepperoni.jpg",
-    "categoria": "tradicional"
+    "nombre": "Facturación de Ventas",
+    "descripcion": "Emisión y gestión de facturas de ventas con cumplimiento normativo.",
+    "precio": "Consultar",
+    "imagen": "img/facturacion.jpg",
+    "categoria": "contabilidad"
   },
   {
-    "nombre": "Hawaiana",
-    "descripcion": "Salsa napolitana, queso doble crema, jamón de cerdo, piña caramelizada.",
-    "precio": "$20.000",
-    "imagen": "img/hawaiana.jpg",
-    "categoria": "tradicional"
+    "nombre": "Causación de Compras",
+    "descripcion": "Registro y contabilización de compras y gastos operacionales.",
+    "precio": "Consultar",
+    "imagen": "img/compras.jpg",
+    "categoria": "contabilidad"
   },
   {
-    "nombre": "Criolla",
-    "descripcion": "Salsa napolitana, queso doble crema, pollo en crema de la casa, maiz tierno, pimentón.",
-    "precio": "$22.000",
-    "imagen": "img/criolla.jpg",
-    "categoria": "especial"
+    "nombre": "Conciliación de Bancos",
+    "descripcion": "Reconciliación de movimientos bancarios versus registros contables.",
+    "precio": "Consultar",
+    "imagen": "img/conciliacion.jpg",
+    "categoria": "contabilidad"
   },
   {
-    "nombre": "Pollo - Champi",
-    "descripcion": "Salsa napolitana, queso doble crema, jamon de cerdo, pollo en crema de la casa, champiñones.",
-    "precio": "$22.000",
-    "imagen": "img/pollo-champi.jpg",
-    "categoria": "especial"
+    "nombre": "Gestión Administrativa",
+    "descripcion": "Soporte en gestión administrativa general de tu empresa.",
+    "precio": "Consultar",
+    "imagen": "img/administrativa.jpg",
+    "categoria": "administrativa"
   },
   {
-    "nombre": "La especial",
-    "descripcion": "Salsa napolitana, queso doble crema, jamon de cerdo, pollo en crema de la casa, maiz tierno, pepperoni.",
-    "precio": "$22.000",
-    "imagen": "img/especial.jpg",
-    "categoria": "especial"
+    "nombre": "Archivo Documental",
+    "descripcion": "Organización y archivo de documentación empresarial.",
+    "precio": "Consultar",
+    "imagen": "img/archivo.jpg",
+    "categoria": "administrativa"
   },
   {
-    "nombre": "Gaseosa x vaso",
-    "descripcion": "Bebida fría.",
-    "precio": "$3.000",
-    "imagen": "img/gaseosa.jpg",
-    "categoria": "bebida"
+    "nombre": "Radicación de Cartas",
+    "descripcion": "Gestión de radicación de documentos ante entidades externas.",
+    "precio": "Consultar",
+    "imagen": "img/cartas.jpg",
+    "categoria": "administrativa"
   },
   {
-    "nombre": "Agua x vaso",
-    "descripcion": "Agua fría.",
-    "precio": "$2.000",
-    "imagen": "img/agua.jpg",
-    "categoria": "bebida"
+    "nombre": "Redacción de Correos",
+    "descripcion": "Redacción profesional de correspondencia empresarial.",
+    "precio": "Consultar",
+    "imagen": "img/correos.jpg",
+    "categoria": "administrativa"
   },
   {
-    "nombre": "Promo de la semana",
-    "descripcion": "Por cada 5 pizzas, una pizza queso - bocadillo a mitad de precio. IMPORTANTE: Solo aplica en compras de 5 o más pizzas, enviar comprobante de compra.",
-    "precio": "$7.000",
-    "imagen": "img/promo.jpg",
-    "categoria": "promociones"
+    "nombre": "Afiliación a EPS",
+    "descripcion": "Gestión de afiliación y cambios ante entidades de salud.",
+    "precio": "Consultar",
+    "imagen": "img/eps.jpg",
+    "categoria": "afiliaciones"
+  },
+  {
+    "nombre": "Afiliación a ARL",
+    "descripcion": "Gestión de afiliación y cotización ante ARL.",
+    "precio": "Consultar",
+    "imagen": "img/arl.jpg",
+    "categoria": "afiliaciones"
+  },
+  {
+    "nombre": "Fondo de Pensión",
+    "descripcion": "Gestión de afiliación y trámites ante fondos de pensión.",
+    "precio": "Consultar",
+    "imagen": "img/pension.jpg",
+    "categoria": "afiliaciones"
+  },
+  {
+    "nombre": "Pagos en Portales Bancarios",
+    "descripcion": "Realización de pagos y transferencias en plataformas bancarias.",
+    "precio": "Consultar",
+    "imagen": "img/portales.jpg",
+    "categoria": "complementarios"
+  },
+  {
+    "nombre": "Actualización de RUT",
+    "descripcion": "Gestión de cambios y actualizaciones en el Registro Único Tributario.",
+    "precio": "Consultar",
+    "imagen": "img/rut.jpg",
+    "categoria": "complementarios"
   }
 ]
