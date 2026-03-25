@@ -1027,10 +1027,20 @@
       padding-top: 2rem;
       border-top: 1px solid rgba(163,177,204,.1);
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
+      text-align: center;
+      gap: .75rem;
+      flex-wrap: wrap;
       font-size: .72rem;
       color: rgba(163,177,204,.4);
+    }
+    .footer-bottom a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .footer-bottom a:hover {
+      color: var(--gold-light);
     }
 
     /* ── WHATSAPP FLOAT ── */
@@ -1385,7 +1395,7 @@
     <h2>¿Listo para poner sus finanzas<br>en manos expertas?</h2>
     <p>Contáctenos hoy y reciba una consulta gratuita. Nos adaptamos a empresas de todos los tamaños en toda Colombia.</p>
     <div class="cta-band-actions">
-      <a href="https://wa.me/573104852208" class="btn-whatsapp" target="_blank">
+      <a href="#" class="btn-whatsapp" target="_blank" onclick="abrirWhatsApp(); return false;">
         <i class="bi bi-whatsapp"></i> Escribir por WhatsApp
       </a>
       <a href="mailto:info@keyrenasesores.com" class="btn-outline-lila">
@@ -1420,7 +1430,6 @@
         <li><a href="#servicios">Servicios</a></li>
         <li><a href="#proceso">Proceso</a></li>
         <li><a href="#cta">Contacto</a></li>
-        <li><a href="login.html">Admin</a></li>
       </ul>
     </div>
     <div class="footer-col footer-contact">
@@ -1433,38 +1442,14 @@
   </div>
   <div class="footer-bottom">
     <span>© 2026 Keyren Asesores. Todos los derechos reservados.</span>
-    <span>Desarrollador web - Nyllereth Jimenez</span>
+    <span>Desarrollador web - <a href="https://www.instagram.com/yiye._m?igsh=MW1xcGNieWdlbHoybA==" target="_blank" rel="noopener noreferrer">Nyllereth Jimenez</a></span>
   </div>
 </footer>
 
 <!-- WHATSAPP -->
-<a href="https://wa.me/573104852208" class="float-contact" target="_blank" title="WhatsApp">
+<a href="#" class="float-contact" target="_blank" title="WhatsApp" onclick="abrirWhatsApp(); return false;">
   <i class="bi bi-whatsapp"></i>
 </a>
-
-<!-- ADMIN -->
-<button class="admin-btn" onclick="window.location.href='login.html'">⚙ Admin</button>
-
-<!-- MODAL -->
-<div class="modal fade" id="svcModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="svcModalTitle">Nombre del servicio</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <p class="desc-text mb-4" id="svcModalDesc"></p>
-        <div class="d-flex align-items-center justify-content-between">
-          <div class="price-display" id="svcModalPrice"></div>
-          <button class="btn-modal-request" onclick="solicitarServicio()">
-            <i class="bi bi-whatsapp me-2"></i>Solicitar ahora
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -1589,8 +1574,16 @@ const catLabels = {
   complementarios: 'Complementarios',
 };
 
-let currentService = null;
 const carouselState = {}; // cardId -> { current: 0 }
+const whatsappNumber = '573104852208';
+
+function abrirWhatsApp(servicio = null, precio = null) {
+  const mensajeBase = servicio
+    ? `Hola, vengo de la página de Keyren Asesores y quisiera más información sobre el servicio ${servicio}${precio ? ` (${precio})` : ''}.`
+    : 'Hola, vengo de la página de Keyren Asesores y quisiera más información sobre sus servicios.';
+  const msg = encodeURIComponent(mensajeBase);
+  window.open(`https://wa.me/${whatsappNumber}?text=${msg}`, '_blank');
+}
 
 function renderCards(list) {
   const container = document.getElementById('menuContainer');
@@ -1634,9 +1627,6 @@ function renderCards(list) {
         <p class="svc-desc">${s.desc}</p>
         <div class="svc-card-footer-row">
           <div class="svc-price">${s.precio}</div>
-          <button class="svc-add-btn" onclick="abrirModal(${s.id})" title="Ver detalles">
-            <i class="bi bi-arrow-right"></i>
-          </button>
         </div>
       </div>
     `;
@@ -1707,20 +1697,10 @@ function filtrar(cat, btn) {
   renderCards(filtered);
 }
 
-function abrirModal(id) {
-  const s = servicios.find(x => x.id === id);
-  if (!s) return;
-  currentService = s;
-  document.getElementById('svcModalTitle').textContent = s.nombre;
-  document.getElementById('svcModalDesc').textContent = s.desc;
-  document.getElementById('svcModalPrice').textContent = s.precio;
-  new bootstrap.Modal(document.getElementById('svcModal')).show();
-}
-
 function solicitarServicio() {
   if (!currentService) return;
   const msg = encodeURIComponent(`Hola, me interesa el servicio: *${currentService.nombre}* (${currentService.precio}). ¿Me pueden dar más información?`);
-  window.open(`https://wa.me/573104852208?text=${msg}`, '_blank');
+  abrirWhatsApp(currentService.nombre, currentService.precio);
 }
 
 // ── SCROLL OBSERVER ──
